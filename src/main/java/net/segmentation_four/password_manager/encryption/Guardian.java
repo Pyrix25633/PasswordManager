@@ -1,15 +1,16 @@
 package net.segmentation_four.password_manager.encryption;
 
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -17,56 +18,48 @@ import java.util.Scanner;
  * Class to handle encryption and decryption
  */
 public class Guardian {
-    private static final String userFilePath = "./.resources/user.pm";
+    private static final String algorithm = "AES/CBC/PKCS5Padding";
 
-    private SecretKey key;
+    private final SecretKey key;
+    private final IvParameterSpec iv;
 
-    public Guardian() throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        BigInteger hash;
-        String salt;
-        if(new File(userFilePath).exists()) {
-            Base64EncodedInputFile in = new Base64EncodedInputFile(userFilePath);
-            hash = in.nextBigInteger();
-            salt = in.next();
-            //TODO: GUI
-            System.out.print("Input password: ");
-            Scanner console = new Scanner(System.in);
-            String password = console.next();
-            if(this.SHA512Hash(password).equals(hash)) {
-                System.out.println("Password is correct");
-                System.out.println("Hash: " + hash);
-                System.out.println("Salt: " + salt);
-                this.setKey(password, salt);
-            }
-            else
-                System.out.println("Password is not correct");
-        }
-        else {
-            Base64EncodedOutputFile out = new Base64EncodedOutputFile(userFilePath);
-            salt = String.valueOf(new Random().nextLong());
-            //TODO: GUI
-            System.out.print("Input new password: ");
-            Scanner console = new Scanner(System.in);
-            String password = console.next();
-            hash = this.SHA512Hash(password);
-            this.setKey(password, salt);
-            System.out.println("Hash: " + hash);
-            System.out.println("Salt: " + salt);
-            out.println(hash);
-            out.println(salt);
-            out.close();
-        }
+    public Guardian(String password, String salt, IvParameterSpec iv) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        this.key = keyFromPassword(password, salt);
+        this.iv = iv;
     }
 
-    public void setKey(String password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public static SecretKey keyFromPassword(String password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
-        this.key = new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
+        return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
     }
 
-    public BigInteger SHA512Hash(String password) throws NoSuchAlgorithmException {
+    public static BigInteger SHA512Hash(String password) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
         byte[] hash = messageDigest.digest(password.getBytes());
         return new BigInteger(1, hash);
+    }
+
+    public static IvParameterSpec generateIv() {
+        byte[] iv = new byte[16];
+        new SecureRandom().nextBytes(iv);
+        return new IvParameterSpec(iv);
+    }
+
+    public byte[] encrypt(String input)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        Cipher cipher = Cipher.getInstance(algorithm);
+        cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
+        return cipher.doFinal(input.getBytes());
+    }
+
+    public String decrypt(byte[] cipherText)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+        Cipher cipher = Cipher.getInstance(algorithm);
+        cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
+        byte[] plainText = cipher.doFinal(cipherText);
+        return new String(plainText);
     }
 }

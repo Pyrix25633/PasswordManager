@@ -2,7 +2,7 @@ package net.segmentation_four.password_manager.gui;
 
 /**
  * Class to manage a position
- * @author Segmentaton Four
+ * @author Pyrix25633
  * @version 1.0.0
  */
 public class Position {

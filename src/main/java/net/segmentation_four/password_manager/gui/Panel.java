@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Class to create a panel
- * @author Segmentaton Four
+ * @author Pyrix25633
  * @version 1.0.0
  */
 public class Panel extends JPanel {

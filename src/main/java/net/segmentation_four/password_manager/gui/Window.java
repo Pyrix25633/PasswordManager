@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 
 /**
  * Class to create a window
- * @author Segmentaton Four
+ * @author Pyrix25633
  * @version 1.0.0
  */
 public class Window extends JFrame {

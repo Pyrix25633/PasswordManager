@@ -5,7 +5,7 @@ import java.awt.*;
 
 /**
  * Class to create a button
- * @author Segmentaton Four
+ * @author Pyrix25633
  * @version 1.0.0
  */
 public class Button extends JButton implements Positionable {

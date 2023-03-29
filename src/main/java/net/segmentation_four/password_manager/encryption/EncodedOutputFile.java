@@ -7,11 +7,11 @@ import java.io.PrintStream;
 import java.math.BigInteger;
 import java.util.Base64;
 
-public class Base64EncodedOutputFile {
+public class EncodedOutputFile {
     private final FileOutputStream fileStream;
     private final PrintStream printStream;
 
-    public Base64EncodedOutputFile(String path) throws FileNotFoundException {
+    public EncodedOutputFile(String path) throws FileNotFoundException {
         this.fileStream = new FileOutputStream(path);
         this.printStream = new PrintStream(this.fileStream);
     }
@@ -22,6 +22,10 @@ public class Base64EncodedOutputFile {
 
     public void println(BigInteger line) {
         this.printStream.println(Base64.getEncoder().encodeToString(line.toByteArray()));
+    }
+
+    public void println(byte[] line) {
+        this.printStream.println(Base64.getEncoder().encodeToString(line));
     }
 
     public void close() throws IOException {
