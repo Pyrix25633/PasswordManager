@@ -1,20 +1,16 @@
 package net.segmentation_four.password_manager;
 
-import net.segmentation_four.password_manager.encryption.EncodedInputFile;
-import net.segmentation_four.password_manager.encryption.EncodedOutputFile;
-import net.segmentation_four.password_manager.encryption.Guardian;
-import net.segmentation_four.password_manager.gui.Label;
-import net.segmentation_four.password_manager.gui.Layout;
-import net.segmentation_four.password_manager.gui.Position;
-import net.segmentation_four.password_manager.gui.TextField;
-import net.segmentation_four.password_manager.gui.Window;
+import net.segmentation_four.password_manager.encryption.*;
 
-import javax.crypto.SecretKey;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
@@ -33,14 +29,14 @@ public class Main {
      * Program entrypoint
      * @param args Command-line arguments
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
         /*
         Window loginWindow = new Window("Password Manager - Login", new Dimension(400, 300));
         loginWindow.setBackground(new Color(100, 100, 100));
         loginWindow.addToPanel(new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(-70, 0)));
-        loginWindow.addToPanel(new TextField("password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(70, 0)));
+        loginWindow.addToPanel(new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(70, 0), 16));
         loginWindow.refresh();
         loginWindow.refresh();
         */
@@ -57,11 +53,8 @@ public class Main {
             System.out.print("Input password: ");
             Scanner console = new Scanner(System.in);
             password = console.next();
-            if(Guardian.SHA512Hash(password).equals(hash)) {
+            if(Security.SHA512Hash(password).equals(hash)) {
                 System.out.println("Password is correct");
-                System.out.println("Hash: " + hash);
-                System.out.println("Salt: " + salt);
-                System.out.println("Iv: " + Arrays.toString(iv.getIV()));
             }
             else
                 System.out.println("Password is not correct");
@@ -70,20 +63,26 @@ public class Main {
         else {
             EncodedOutputFile out = new EncodedOutputFile(userFilePath);
             salt = String.valueOf(new Random().nextLong());
-            iv = Guardian.generateIv();
+            iv = Security.generateIv();
             //TODO: GUI
             System.out.print("Input new password: ");
             Scanner console = new Scanner(System.in);
             password = console.next();
-            hash = Guardian.SHA512Hash(password);
-            System.out.println("Hash: " + hash);
-            System.out.println("Salt: " + salt);
-            System.out.println("Iv: " + Arrays.toString(iv.getIV()));
+            hash = Security.SHA512Hash(password);
             out.println(hash);
             out.println(salt);
             out.println(iv.getIV());
             out.close();
         }
-        Guardian guardian = new Guardian(password, salt, iv);
+        System.out.println("Hash: " + hash);
+        System.out.println("Salt: " + salt);
+        System.out.println("Iv: " + Arrays.toString(iv.getIV()));
+        Security security = new Security(password, salt, iv);
+        EncryptedOutputFile out = new EncryptedOutputFile("./.resources/test.acc", security);
+        out.println("Test123@#$");
+        out.close();
+        EncryptedInputFile in = new EncryptedInputFile("./.resources/test.acc", security);
+        System.out.println(in.next());
+        in.close();
     }
 }

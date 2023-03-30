@@ -28,20 +28,21 @@ public class TextField extends JTextField implements Positionable {
     /**
      * The input length limit
      */
-    private final int limit;
+    protected final int limit;
 
     /**
      * Constructor
      * @param text The String text
      * @param layout The Layout
      * @param position The Position
+     * @param limit The max input length
      */
-    public TextField(String text, Layout layout, Position position) {
+    public TextField(String text, Layout layout, Position position, int limit) {
         super();
         this.setFont(font);
         this.layout = layout;
         this.position = position;
-        this.limit = 16;
+        this.limit = limit;
         this.setText(text);
     }
 
@@ -86,7 +87,7 @@ public class TextField extends JTextField implements Positionable {
     /**
      * Inner class for limiting number of characters
      */
-    private class LimitDocument extends PlainDocument {
+    protected class LimitDocument extends PlainDocument {
         /**
          * Method to add a string to the document if it fits
          * @param offset The offset

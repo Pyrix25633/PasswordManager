@@ -9,21 +9,17 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Random;
-import java.util.Scanner;
 
 /**
  * Class to handle encryption and decryption
  */
-public class Guardian {
+public class Security {
     private static final String algorithm = "AES/CBC/PKCS5Padding";
 
     private final SecretKey key;
     private final IvParameterSpec iv;
 
-    public Guardian(String password, String salt, IvParameterSpec iv) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+    public Security(String password, String salt, IvParameterSpec iv) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
         this.key = keyFromPassword(password, salt);
         this.iv = iv;
     }
@@ -46,20 +42,19 @@ public class Guardian {
         return new IvParameterSpec(iv);
     }
 
-    public byte[] encrypt(String input)
+    public byte[] encrypt(byte[] input)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
-        return cipher.doFinal(input.getBytes());
+        return cipher.doFinal(input);
     }
 
-    public String decrypt(byte[] cipherText)
+    public byte[] decrypt(byte[] cipherText)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
-        byte[] plainText = cipher.doFinal(cipherText);
-        return new String(plainText);
+        return cipher.doFinal(cipherText);
     }
 }
