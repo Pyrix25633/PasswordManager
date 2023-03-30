@@ -1,4 +1,4 @@
-package net.segmentation_four.password_manager.gui;
+package net.segmentation_four.password_manager.ui;
 
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
@@ -25,6 +25,7 @@ public class TextField extends JTextField implements Positionable {
      * The Position
      */
     private final Position position;
+    protected final Window window;
     /**
      * The input length limit
      */
@@ -37,11 +38,12 @@ public class TextField extends JTextField implements Positionable {
      * @param position The Position
      * @param limit The max input length
      */
-    public TextField(String text, Layout layout, Position position, int limit) {
+    public TextField(String text, Layout layout, Position position, Window window, int limit) {
         super();
         this.setFont(font);
         this.layout = layout;
         this.position = position;
+        this.window = window;
         this.limit = limit;
         this.setText(text);
     }
@@ -101,6 +103,15 @@ public class TextField extends JTextField implements Positionable {
 
             if((getLength() + str.length()) <= limit)
                 super.insertString(offset, str, attr);
+
+            window.refresh();
+        }
+
+        @Override
+        public void remove(int offs, int len) throws BadLocationException {
+            super.remove(offs, len);
+
+            window.refresh();
         }
     }
 }

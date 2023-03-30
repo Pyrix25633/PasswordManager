@@ -1,4 +1,4 @@
-package net.segmentation_four.password_manager.gui;
+package net.segmentation_four.password_manager.ui;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -14,8 +14,8 @@ public class CensoredTextField extends TextField {
      * @param position The Position
      * @param limit The max input length
      */
-    public CensoredTextField(Layout layout, Position position, int limit) {
-        super("", layout, position, limit);
+    public CensoredTextField(Layout layout, Position position, Window window, int limit) {
+        super("", layout, position, window, limit);
         this.text = "";
     }
 
@@ -49,8 +49,7 @@ public class CensoredTextField extends TextField {
                 System.out.println(text);
             }
 
-            repaint();
-            repaint();
+            window.refresh();
         }
 
         @Override
@@ -59,8 +58,7 @@ public class CensoredTextField extends TextField {
 
             text = text.substring(0, offs) + text.substring(offs + len);
 
-            repaint();
-            repaint();
+            window.refresh();
         }
     }
 }

@@ -1,8 +1,7 @@
-package net.segmentation_four.password_manager.gui;
+package net.segmentation_four.password_manager.ui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyListener;
 
 /**
  * Class to create a window
@@ -47,6 +46,7 @@ public class Window extends JFrame {
      */
     public <T extends Component & Positionable> void addToPanel(T positionable) {
         this.panel.addPositionable(positionable);
+        this.panel.repaint();
     }
 
     /**

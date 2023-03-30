@@ -1,4 +1,4 @@
-package net.segmentation_four.password_manager.gui;
+package net.segmentation_four.password_manager.ui;
 
 /**
  * Class to manage a position
