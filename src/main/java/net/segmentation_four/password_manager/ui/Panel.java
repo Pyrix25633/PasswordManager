@@ -55,7 +55,6 @@ public class Panel extends JPanel {
     @Override
     public void repaint() {
         if(positionables == null) return;
-        super.repaint();
         for(Positionable p : positionables) {
             int x = switch(p.getPositionableLayout().horizontal) {
                 case LEFT -> p.getPosition().getX();
@@ -70,5 +69,6 @@ public class Panel extends JPanel {
             p.setXY(x, y);
         }
         super.setBackground(color);
+        super.repaint();
     }
 }

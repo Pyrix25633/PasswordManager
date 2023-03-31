@@ -1,5 +1,7 @@
 package net.segmentation_four.password_manager.ui;
 
+import net.segmentation_four.password_manager.util.ResourceLoader;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,6 +11,8 @@ import java.awt.*;
  * @version 1.0.0
  */
 public class Window extends JFrame {
+    private static final String iconPath = "./.resources/icon.png";
+
     /**
      * The Panel
      */
@@ -27,6 +31,7 @@ public class Window extends JFrame {
         this.setMinimumSize(dimension);
         this.panel = new Panel();
         this.add(panel);
+        this.setIconImage(ResourceLoader.loadImage(iconPath));
         this.setVisible(true);
     }
 
@@ -64,6 +69,7 @@ public class Window extends JFrame {
      * Method to repaint the Window's Panel
      */
     public void refresh() {
+        this.panel.repaint();
         this.panel.repaint();
     }
 }

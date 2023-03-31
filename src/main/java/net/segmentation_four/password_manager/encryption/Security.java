@@ -9,12 +9,16 @@ import java.math.BigInteger;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class to handle encryption and decryption
  */
 public class Security {
     private static final String algorithm = "AES/CBC/PKCS5Padding";
+    private static ArrayList<Character> validPasswordChars = null;
 
     private final SecretKey key;
     private final IvParameterSpec iv;
@@ -56,5 +60,69 @@ public class Security {
         Cipher cipher = Cipher.getInstance(algorithm);
         cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
         return cipher.doFinal(cipherText);
+    }
+
+    private static ArrayList<Character> getValidPasswordChars() {
+        if(validPasswordChars == null) {
+            validPasswordChars = new ArrayList<>();
+            for(char c = 'A'; c <= 'Z'; c++)
+                validPasswordChars.add(c);
+            for(char c = 'a'; c <= 'z'; c++)
+                validPasswordChars.add(c);
+            for(char c = '0'; c <= '9'; c++)
+                validPasswordChars.add(c);
+            validPasswordChars.add('+');
+            validPasswordChars.add('-');
+            validPasswordChars.add('*');
+            validPasswordChars.add('/');
+            validPasswordChars.add('=');
+            validPasswordChars.add('_');
+            validPasswordChars.add('!');
+            validPasswordChars.add('?');
+            validPasswordChars.add('.');
+            validPasswordChars.add(':');
+            validPasswordChars.add('#');
+            validPasswordChars.add('@');
+            validPasswordChars.add('$');
+        }
+        return validPasswordChars;
+    }
+
+    public static boolean isValidPassword(String password) {
+        ArrayList<Character> validChars = getValidPasswordChars();
+        int uppercaseLetters = 0, symbols = 0, numbers = 0;
+        for(char c : password.toCharArray()) {
+            if(!validChars.contains(c)) return false;
+            if(Character.isDigit(c)) numbers++;
+            else if(Character.isUpperCase(c)) uppercaseLetters++;
+            else if(!Character.isAlphabetic(c)) symbols++;
+        }
+        return uppercaseLetters >= 1 && symbols >= 1 && numbers >= 2 && password.length() >= 8;
+    }
+
+    public static String passwordFeedback(String password) {
+        ArrayList<Character> validChars = getValidPasswordChars();
+        int uppercaseLetters = 0, symbols = 0, numbers = 0;
+        for(char c : password.toCharArray()) {
+            if(!validChars.contains(c)) return c + " is not allowed!";
+            if(Character.isDigit(c)) numbers++;
+            else if(Character.isUpperCase(c)) uppercaseLetters++;
+            else if(!Character.isAlphabetic(c)) symbols++;
+        }
+        if(uppercaseLetters < 1) return uppercaseLetters + "/1+ uppercase letters!";
+        if(symbols < 1) return symbols + "/1+ symbols!";
+        if(numbers < 2) return numbers + "/2+ numbers!";
+        if(password.length() < 8) return password.length() + "/8+ characters!";
+        return "Valid password";
+    }
+
+    public static String generatePassword(int length) {
+        ArrayList<Character> validChars = getValidPasswordChars();
+        if(length < 8) length = 8;
+        StringBuilder password = new StringBuilder();
+        for(int i = 0; i < length; i++) {
+            password.append(validChars.get(new Random().nextInt(validChars.size())));
+        }
+        return isValidPassword(password.toString()) ? password.toString() : generatePassword(length);
     }
 }

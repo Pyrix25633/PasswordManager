@@ -39,7 +39,7 @@ public class TextField extends JTextField implements Positionable {
      * @param limit The max input length
      */
     public TextField(String text, Layout layout, Position position, Window window, int limit) {
-        super();
+        super(limit);
         this.setFont(font);
         this.layout = layout;
         this.position = position;

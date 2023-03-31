@@ -5,7 +5,6 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -17,16 +16,16 @@ public class UserFile {
     private static final String path = "./.resources/PasswordManager.usr";
     private static UserFile instance = null;
 
-    public static UserFile getInstance() throws FileNotFoundException {
+    public static UserFile getInstance() throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         if(instance == null) instance = new UserFile();
         return instance;
     }
 
-    private BigInteger hash;
-    private String salt;
-    private IvParameterSpec iv;
+    private final BigInteger hash;
+    private final String salt;
+    private final IvParameterSpec iv;
 
-    public UserFile() throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
+    private UserFile() throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
             IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         EncodedInputFile in = new EncodedInputFile(path);
         this.hash = in.nextBigInteger();

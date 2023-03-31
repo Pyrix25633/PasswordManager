@@ -1,6 +1,9 @@
 package net.segmentation_four.password_manager;
 
 import net.segmentation_four.password_manager.encryption.*;
+import net.segmentation_four.password_manager.ui.CommandLineInterface;
+import net.segmentation_four.password_manager.ui.GraphicUserInterface;
+import net.segmentation_four.password_manager.ui.UserInterface;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -13,9 +16,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Main class
@@ -29,18 +30,8 @@ public class Main {
      * Program entrypoint
      * @param args Command-line arguments
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        /*
-        Window loginWindow = new Window("Password Manager - Login", new Dimension(400, 300));
-        loginWindow.setBackground(new Color(100, 100, 100));
-        loginWindow.addToPanel(new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-70, 0)));
-        loginWindow.addToPanel(new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(70, 0), 16));
-        loginWindow.refresh();
-        loginWindow.refresh();
-        */
-        String password;
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException {
+        /*String password;
         BigInteger hash;
         String salt;
         IvParameterSpec iv;
@@ -83,6 +74,10 @@ public class Main {
         out.close();
         EncryptedInputFile in = new EncryptedInputFile("./.resources/test.acc", security);
         System.out.println(in.next());
-        in.close();
+        in.close();*/
+        UserInterface userInterface = new ArrayList<>(List.of(args)).contains("nogui") ?
+                new CommandLineInterface(System.in, System.out) : new GraphicUserInterface();
+        if(!UserFile.exists()) UserFile.create(userInterface.getNewPassword());
+        System.out.println(userInterface.getPassword());
     }
 }
