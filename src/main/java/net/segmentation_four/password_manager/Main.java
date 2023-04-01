@@ -1,5 +1,6 @@
 package net.segmentation_four.password_manager;
 
+import com.google.zxing.WriterException;
 import net.segmentation_four.password_manager.encryption.*;
 import net.segmentation_four.password_manager.ui.CommandLineInterface;
 import net.segmentation_four.password_manager.ui.GraphicUserInterface;
@@ -30,7 +31,7 @@ public class Main {
      * Program entrypoint
      * @param args Command-line arguments
      */
-    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InterruptedException, WriterException {
         /*String password;
         BigInteger hash;
         String salt;
@@ -77,7 +78,11 @@ public class Main {
         in.close();*/
         UserInterface userInterface = new ArrayList<>(List.of(args)).contains("nogui") ?
                 new CommandLineInterface(System.in, System.out) : new GraphicUserInterface();
-        if(!UserFile.exists()) UserFile.create(userInterface.getNewPassword());
+        if(!UserFile.exists()) {
+            String tfaKey = Security.generateTfaKey();
+            UserFile.create(userInterface.getNewPassword(tfaKey), tfaKey);
+        }
         System.out.println(userInterface.getPassword());
+        userInterface.tfAuthenticate();
     }
 }

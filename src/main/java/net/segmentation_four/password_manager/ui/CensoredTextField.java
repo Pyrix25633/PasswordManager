@@ -39,19 +39,13 @@ public class CensoredTextField extends TextField {
      */
     @Override
     protected Document createDefaultModel() {
-        return new CensoredLimitDocument(this);
+        return new CensoredLimitDocument();
     }
 
     /**
      * Inner class for limiting number of characters
      */
     private class CensoredLimitDocument extends PlainDocument {
-        CensoredTextField reference;
-
-        public CensoredLimitDocument(CensoredTextField reference) {
-            this.reference = reference;
-        }
-
         /**
          * Method to add a string to the document if it fits
          * @param offset The offset
@@ -68,7 +62,7 @@ public class CensoredTextField extends TextField {
                 text = text.substring(0, offset) + str + text.substring(offset);
             }
 
-            if(onUpdate != null) onUpdate.update(reference);
+            if(onUpdate != null) onUpdate.update(text);
             window.refresh();
         }
 
@@ -78,7 +72,7 @@ public class CensoredTextField extends TextField {
 
             text = text.substring(0, offs) + text.substring(offs + len);
 
-            if(onUpdate != null) onUpdate.update(reference);
+            if(onUpdate != null) onUpdate.update(text);
             window.refresh();
         }
     }

@@ -33,6 +33,9 @@ public class Button extends JButton implements Positionable {
         this.setFont(font);
         this.layout = layout;
         this.position = position;
+        this.setBackground(GraphicUserInterface.BUTTON);
+        this.setForeground(GraphicUserInterface.FOREGROUND);
+        this.setBorderPainted(false);
     }
 
     /**

@@ -33,6 +33,7 @@ public class Label extends JLabel implements Positionable {
         this.setFont(font);
         this.layout = layout;
         this.position = position;
+        this.setForeground(GraphicUserInterface.FOREGROUND);
     }
 
     /**

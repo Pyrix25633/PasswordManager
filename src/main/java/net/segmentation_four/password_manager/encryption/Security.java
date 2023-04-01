@@ -6,19 +6,30 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import de.taimos.totp.TOTP;
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Hex;
 
 /**
  * Class to handle encryption and decryption
  */
 public class Security {
-    private static final String algorithm = "AES/CBC/PKCS5Padding";
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static ArrayList<Character> validPasswordChars = null;
+    public static final String TFA_QR_PATH = "./.resources/PasswordManager.tfa";
 
     private final SecretKey key;
     private final IvParameterSpec iv;
@@ -49,7 +60,7 @@ public class Security {
     public byte[] encrypt(byte[] input)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Cipher cipher = Cipher.getInstance(algorithm);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
         return cipher.doFinal(input);
     }
@@ -57,7 +68,7 @@ public class Security {
     public byte[] decrypt(byte[] cipherText)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException,
             InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        Cipher cipher = Cipher.getInstance(algorithm);
+        Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
         return cipher.doFinal(cipherText);
     }
@@ -124,5 +135,32 @@ public class Security {
             password.append(validChars.get(new Random().nextInt(validChars.size())));
         }
         return isValidPassword(password.toString()) ? password.toString() : generatePassword(length);
+    }
+
+    public static String generateTfaKey() {
+        byte[] bytes = new byte[20];
+        new SecureRandom().nextBytes(bytes);
+        return new Base32().encodeToString(bytes);
+    }
+
+    public static String getTOTPCode(String tfaKey) {
+        byte[] bytes = new Base32().decode(tfaKey);
+        String hexKey = Hex.encodeHexString(bytes);
+        return TOTP.getOTP(hexKey);
+    }
+
+    public static void createGoogleAuthenticatorQRCode(String tfaKey) throws WriterException {
+        String pm = "PasswordManager";
+        String barCode = "otpauth://totp/"
+                + URLEncoder.encode(pm + ":" + pm, StandardCharsets.UTF_8).replace("+", "%20")
+                + "?secret=" + URLEncoder.encode(tfaKey, StandardCharsets.UTF_8).replace("+", "%20")
+                + "&issuer=" + URLEncoder.encode(pm, StandardCharsets.UTF_8).replace("+", "%20");
+        BitMatrix matrix = new MultiFormatWriter().encode(barCode, BarcodeFormat.QR_CODE,
+                640, 640);
+        try (FileOutputStream out = new FileOutputStream(TFA_QR_PATH)) {
+            MatrixToImageWriter.writeToStream(matrix, "png", out);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

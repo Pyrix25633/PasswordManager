@@ -26,7 +26,7 @@ public class Panel extends JPanel {
         super();
         this.positionables = new ArrayList<>();
         this.setLayout(null);
-        this.color = new Color(0xfdffb6);
+        this.color = GraphicUserInterface.BACKGROUND;
     }
 
     /**

@@ -46,6 +46,8 @@ public class TextField extends JTextField implements Positionable {
         this.window = window;
         this.limit = limit;
         this.setText(text);
+        this.setBackground(GraphicUserInterface.BACKGROUND);
+        this.setForeground(GraphicUserInterface.FOREGROUND);
     }
 
     /**

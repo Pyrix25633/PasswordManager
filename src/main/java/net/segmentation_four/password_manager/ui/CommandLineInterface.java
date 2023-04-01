@@ -15,8 +15,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class CommandLineInterface implements UserInterface {
-    private Scanner in;
-    private PrintStream out;
+    private final Scanner in;
+    private final PrintStream out;
 
     public CommandLineInterface(InputStream in, PrintStream out) {
         this.in = new Scanner(in);
@@ -27,27 +27,39 @@ public class CommandLineInterface implements UserInterface {
     public String getPassword() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UserFile userFile = UserFile.getInstance();
         out.print("Password: ");
-        String password = in.next();
+        String password = in.nextLine();
         while(!Security.SHA512Hash(password).equals(userFile.getHash())) {
             out.println("Wrong password!");
             out.print("Password: ");
-            password = in.next();
+            password = in.nextLine();
         }
         return password;
     }
 
     @Override
-    public String getNewPassword() {
+    public String getNewPassword(String tfaKey) {
         out.print("New password: ");
-        String password = in.next();
+        String password = in.nextLine();
         String message = Security.passwordFeedback(password);
         while(message.contains("!")) {
             out.println(message);
             out.print("New password: ");
-            password = in.next();
+            password = in.nextLine();
             message = Security.passwordFeedback(password);
         }
-        System.out.println(message);
+        System.out.println("2FactorAuthentication key: " + tfaKey);
         return password;
+    }
+
+    @Override
+    public void tfAuthenticate() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        UserFile userFile = UserFile.getInstance();
+        out.print("2FA code: ");
+        String tfaCode = in.nextLine();
+        while(!Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCode.replace(" ", ""))) {
+            out.println("Wrong 2fa code!");
+            out.print("2FA code: ");
+            tfaCode = in.nextLine();
+        }
     }
 }

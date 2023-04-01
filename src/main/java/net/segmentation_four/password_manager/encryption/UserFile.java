@@ -22,6 +22,7 @@ public class UserFile {
     }
 
     private final BigInteger hash;
+    private final String tfaKey;
     private final String salt;
     private final IvParameterSpec iv;
 
@@ -29,6 +30,7 @@ public class UserFile {
             IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         EncodedInputFile in = new EncodedInputFile(path);
         this.hash = in.nextBigInteger();
+        this.tfaKey = in.next();
         this.salt = in.next();
         this.iv = new IvParameterSpec(in.nextBytes());
         in.close();
@@ -36,6 +38,10 @@ public class UserFile {
 
     public BigInteger getHash() {
         return hash;
+    }
+
+    public String getTfaKey() {
+        return tfaKey;
     }
 
     public String getSalt() {
@@ -50,9 +56,10 @@ public class UserFile {
         return new File(path).exists();
     }
 
-    public static void create(String password) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public static void create(String password, String tfaKey) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         EncodedOutputFile out = new EncodedOutputFile(path);
         out.println(Security.SHA512Hash(password));
+        out.println(tfaKey);
         out.println(String.valueOf(new Random().nextLong()));
         out.println(Security.generateIv().getIV());
         out.close();
