@@ -33,6 +33,13 @@ public class CommandLineInterface implements UserInterface {
             out.print("Password: ");
             password = in.nextLine();
         }
+        out.print("2FA code: ");
+        String tfaCode = in.nextLine();
+        while(!Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCode.replace(" ", ""))) {
+            out.println("Wrong 2fa code!");
+            out.print("2FA code: ");
+            tfaCode = in.nextLine();
+        }
         return password;
     }
 
@@ -49,17 +56,5 @@ public class CommandLineInterface implements UserInterface {
         }
         System.out.println("2FactorAuthentication key: " + tfaKey);
         return password;
-    }
-
-    @Override
-    public void tfAuthenticate() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        UserFile userFile = UserFile.getInstance();
-        out.print("2FA code: ");
-        String tfaCode = in.nextLine();
-        while(!Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCode.replace(" ", ""))) {
-            out.println("Wrong 2fa code!");
-            out.print("2FA code: ");
-            tfaCode = in.nextLine();
-        }
     }
 }

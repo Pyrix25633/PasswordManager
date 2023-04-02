@@ -29,27 +29,46 @@ public class GraphicUserInterface implements UserInterface {
     public synchronized String getPassword() throws InterruptedException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UserFile userFile = UserFile.getInstance();
         AtomicReference<String> password = new AtomicReference<>();
-        Window window = new Window("Login", new Dimension(450, 280));
+        Window window = new Window("Password Manager - Login", new Dimension(450, 380));
         Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-120, -50));
+                new Position(-120, -100));
         CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(60, -50), window, 16);
-        Label feedback = new Label("Insert password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(0, 0));
-        Button loginButton = new Button("Login", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(70, -100), window, 16);
+        Label passwordFeedback = new Label("Insert password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(0, -50));
+        Label tfaCodeLabel = new Label("2FA code:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(-120, 0));
+        TextField tfaCodeField = new TextField("", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(70, 0), window, 16);
+        Label tfaCodeFeedback = new Label("Insert 2FA code", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(0, 50));
+        Button loginButton = new Button("Login", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(0, 100));
         loginButton.addActionListener((ActionEvent actionEvent) -> {
             synchronized(this) {
-                String text = passwordField.getText();
+                String passwordText = passwordField.getText();
                 try {
-                    if(Security.SHA512Hash(text).equals(userFile.getHash())) {
-                        password.set(text);
-                        notifyAll();
+                    boolean passwordCorrect = Security.SHA512Hash(passwordText).equals(userFile.getHash());
+                    boolean tfaCodeCorrect = Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCodeField.getText().replace(" ", ""));
+                    if(passwordCorrect) {
+                        password.set(passwordText);
+                        passwordFeedback.setText("Correct password");
+                        passwordFeedback.setForeground(SUCCESS);
                     }
                     else {
-                        feedback.setText("Wrong password!");
-                        feedback.setForeground(ERROR);
+                        passwordFeedback.setText("Wrong password!");
+                        passwordFeedback.setForeground(ERROR);
                     }
+                    if(tfaCodeCorrect) {
+                        tfaCodeFeedback.setText("Correct 2FA code");
+                        tfaCodeFeedback.setForeground(SUCCESS);
+                    }
+                    else {
+                        tfaCodeFeedback.setText("Wrong 2FA code!");
+                        tfaCodeFeedback.setForeground(ERROR);
+                    }
+                    if(passwordCorrect && tfaCodeCorrect) notifyAll();
+                    window.refresh();
                 } catch (NoSuchAlgorithmException e) {
                     throw new RuntimeException(e);
                 }
@@ -57,7 +76,10 @@ public class GraphicUserInterface implements UserInterface {
         });
         window.addToPanel(passwordLabel);
         window.addToPanel(passwordField);
-        window.addToPanel(feedback);
+        window.addToPanel(passwordFeedback);
+        window.addToPanel(tfaCodeLabel);
+        window.addToPanel(tfaCodeField);
+        window.addToPanel(tfaCodeFeedback);
         window.addToPanel(loginButton);
         window.refresh();
         wait();
@@ -69,13 +91,13 @@ public class GraphicUserInterface implements UserInterface {
     public synchronized String getNewPassword(String tfaKey) throws InterruptedException, WriterException {
         Security.createGoogleAuthenticatorQRCode(tfaKey);
         AtomicReference<String> password = new AtomicReference<>();
-        Window window = new Window("New Password", new Dimension(450, 480));
+        Window window = new Window("Password Manager - New Password", new Dimension(450, 480));
         Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(-120, -160));
         Label feedback = new Label("Insert password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(0, -110));
         CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(60, -160), window, 16,
+                new Position(70, -160), window, 16,
                 (String text) -> {
                     String message = Security.passwordFeedback(text);
                     feedback.setText(message);
@@ -114,37 +136,5 @@ public class GraphicUserInterface implements UserInterface {
         window.dispose();
         new File(Security.TFA_QR_PATH).delete();
         return password.get();
-    }
-
-    @Override
-    public synchronized void tfAuthenticate() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InterruptedException {
-        UserFile userFile = UserFile.getInstance();
-        Window window = new Window("Login", new Dimension(450, 280));
-        Label passwordLabel = new Label("2FA code:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-120, -50));
-        TextField passwordField = new TextField("", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(60, -50), window, 16);
-        Label feedback = new Label("Insert 2FA code", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(0, 0));
-        Button loginButton = new Button("Login", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(0, 50));
-        loginButton.addActionListener((ActionEvent actionEvent) -> {
-            synchronized(this) {
-                if(Security.getTOTPCode(userFile.getTfaKey()).equals(passwordField.getText().replace(" ", ""))) {
-                    notifyAll();
-                }
-                else {
-                    feedback.setText("Wrong 2FA code!");
-                    feedback.setForeground(ERROR);
-                }
-            }
-        });
-        window.addToPanel(passwordLabel);
-        window.addToPanel(passwordField);
-        window.addToPanel(feedback);
-        window.addToPanel(loginButton);
-        window.refresh();
-        wait();
-        window.dispose();
     }
 }

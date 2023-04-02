@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class UserFile {
-    private static final String path = "./.resources/PasswordManager.usr";
+    private static final String PATH = "./.resources/PasswordManager.usr";
     private static UserFile instance = null;
 
     public static UserFile getInstance() throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
@@ -28,7 +28,7 @@ public class UserFile {
 
     private UserFile() throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException,
             IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        EncodedInputFile in = new EncodedInputFile(path);
+        EncodedInputFile in = new EncodedInputFile(PATH);
         this.hash = in.nextBigInteger();
         this.tfaKey = in.next();
         this.salt = in.next();
@@ -53,15 +53,16 @@ public class UserFile {
     }
 
     public static boolean exists() {
-        return new File(path).exists();
+        return new File(PATH).exists();
     }
 
     public static void create(String password, String tfaKey) throws IOException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        EncodedOutputFile out = new EncodedOutputFile(path);
+        EncodedOutputFile out = new EncodedOutputFile(PATH);
         out.println(Security.SHA512Hash(password));
         out.println(tfaKey);
         out.println(String.valueOf(new Random().nextLong()));
         out.println(Security.generateIv().getIV());
         out.close();
+        instance = new UserFile();
     }
 }
