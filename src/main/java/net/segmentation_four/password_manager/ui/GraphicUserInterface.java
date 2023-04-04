@@ -1,6 +1,7 @@
 package net.segmentation_four.password_manager.ui;
 
 import com.google.zxing.WriterException;
+import net.segmentation_four.password_manager.Main;
 import net.segmentation_four.password_manager.encryption.Security;
 import net.segmentation_four.password_manager.encryption.UserFile;
 import net.segmentation_four.password_manager.util.ResourceLoader;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class GraphicUserInterface implements UserInterface {
@@ -23,23 +25,23 @@ public class GraphicUserInterface implements UserInterface {
     public static final Color BACKGROUND = new Color(0x1d1c1a);
     public static final Color ERROR = new Color(0xff6961);
     public static final Color SUCCESS = new Color(0x77dd77);
-    public static final Color BUTTON = new Color(0x7ea4b3);
+    public static final Color BUTTON = new Color(0xa3b8cc);
 
     @Override
     public synchronized String getPassword() throws InterruptedException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         UserFile userFile = UserFile.getInstance();
         AtomicReference<String> password = new AtomicReference<>();
-        Window window = new Window("Password Manager - Login", new Dimension(450, 380));
+        Window window = new Window("Password Manager - Login", new Dimension(660, 350));
         Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-120, -100));
+                new Position(-230, -100));
         CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(70, -100), window, 16);
+                new Position(65, -100), window, 32);
         Label passwordFeedback = new Label("Insert password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(0, -50));
         Label tfaCodeLabel = new Label("2FA code:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-120, 0));
+                new Position(-70, 0));
         TextField tfaCodeField = new TextField("", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(70, 0), window, 16);
+                new Position(50, 0), window, 7);
         Label tfaCodeFeedback = new Label("Insert 2FA code", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(0, 50));
         Button loginButton = new Button("Login", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
@@ -54,16 +56,14 @@ public class GraphicUserInterface implements UserInterface {
                         password.set(passwordText);
                         passwordFeedback.setText("Correct password");
                         passwordFeedback.setForeground(SUCCESS);
-                    }
-                    else {
+                    } else {
                         passwordFeedback.setText("Wrong password!");
                         passwordFeedback.setForeground(ERROR);
                     }
                     if(tfaCodeCorrect) {
                         tfaCodeFeedback.setText("Correct 2FA code");
                         tfaCodeFeedback.setForeground(SUCCESS);
-                    }
-                    else {
+                    } else {
                         tfaCodeFeedback.setText("Wrong 2FA code!");
                         tfaCodeFeedback.setForeground(ERROR);
                     }
@@ -91,13 +91,13 @@ public class GraphicUserInterface implements UserInterface {
     public synchronized String getNewPassword(String tfaKey) throws InterruptedException, WriterException {
         Security.createGoogleAuthenticatorQRCode(tfaKey);
         AtomicReference<String> password = new AtomicReference<>();
-        Window window = new Window("Password Manager - New Password", new Dimension(450, 480));
+        Window window = new Window("Password Manager - New Password", new Dimension(660, 470));
         Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(-120, -160));
+                new Position(-230, -160));
         Label feedback = new Label("Insert password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(0, -110));
         CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
-                new Position(70, -160), window, 16,
+                new Position(65, -160), window, 32,
                 (String text) -> {
                     String message = Security.passwordFeedback(text);
                     feedback.setText(message);
@@ -136,5 +136,27 @@ public class GraphicUserInterface implements UserInterface {
         window.dispose();
         new File(Security.TFA_QR_PATH).delete();
         return password.get();
+    }
+
+    @Override
+    public void main() {
+        Window window = new Window("Password Manager", new Dimension(660, 730));
+        Button changePasswordButton = new Button("Change Password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(-100, -325));
+        changePasswordButton.addActionListener((ActionEvent actionEvent) -> {
+            new Thread(() -> { try {
+                Main.changePassword();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }}).start();
+        });
+        Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(-230, -160));
+        CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(65, -160), window, 32);
+        window.addToPanel(passwordLabel);
+        window.addToPanel(passwordField);
+        window.addToPanel(changePasswordButton);
+        window.refresh();
     }
 }

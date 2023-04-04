@@ -12,7 +12,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 public class AccountFile {
-    private static final String PATH = "./.resources/$.acc";
+    private static final String PATH = "./.resources/accounts/$.acc";
 
     private final String username;
     private final String password;

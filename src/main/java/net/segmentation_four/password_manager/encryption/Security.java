@@ -130,6 +130,7 @@ public class Security {
     public static String generatePassword(int length) {
         ArrayList<Character> validChars = getValidPasswordChars();
         if(length < 8) length = 8;
+        else if(length > 32) length = 32;
         StringBuilder password = new StringBuilder();
         for(int i = 0; i < length; i++) {
             password.append(validChars.get(new Random().nextInt(validChars.size())));

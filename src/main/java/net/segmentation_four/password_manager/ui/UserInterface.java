@@ -14,4 +14,6 @@ public interface UserInterface {
     String getPassword() throws InterruptedException, InvalidAlgorithmParameterException, NoSuchPaddingException,
             IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
     String getNewPassword(String tfaKey) throws InterruptedException, WriterException;
+
+    void main();
 }

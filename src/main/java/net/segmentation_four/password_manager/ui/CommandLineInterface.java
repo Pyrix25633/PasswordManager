@@ -57,4 +57,9 @@ public class CommandLineInterface implements UserInterface {
         System.out.println("2FactorAuthentication key: " + tfaKey);
         return password;
     }
+
+    @Override
+    public void main() {
+
+    }
 }

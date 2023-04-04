@@ -3,12 +3,7 @@ package net.segmentation_four.password_manager.ui;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * Class to create a button
- * @author Pyrix25633
- * @version 1.0.0
- */
-public class Button extends JButton implements Positionable {
+public class ComboBox extends JComboBox<String> implements Positionable {
     /**
      * Static field for the font
      */
@@ -18,24 +13,23 @@ public class Button extends JButton implements Positionable {
      */
     private final Layout layout;
     /**
-     * The Position
+     * The Layout
      */
     private final Position position;
 
     /**
      * Constructor
-     * @param text The String text
+     * @param elements The elements
      * @param layout The Layout
      * @param position The Position
      */
-    public Button(String text, Layout layout, Position position) {
-        super(text);
+    public ComboBox(String[] elements, Layout layout, Position position) {
+        super(elements);
         this.setFont(font);
         this.layout = layout;
         this.position = position;
-        this.setBackground(GraphicUserInterface.BUTTON);
-        this.setForeground(GraphicUserInterface.BACKGROUND);
-        this.setBorderPainted(false);
+        this.setBackground(GraphicUserInterface.BACKGROUND);
+        this.setForeground(GraphicUserInterface.FOREGROUND);
     }
 
     /**
