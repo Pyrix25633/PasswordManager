@@ -37,6 +37,24 @@ public class Label extends JLabel implements Positionable {
     }
 
     /**
+     * Constructor
+     * @param text The text
+     * @param layout The Layout
+     * @param position The Position
+     */
+    public Label(String text, Layout layout, Position position, int width) {
+        super(text);
+        this.setFont(font);
+        this.layout = layout;
+        this.position = position;
+        this.setBackground(GraphicUserInterface.ITEM_BACKGROUND);
+        this.setOpaque(true);
+        this.setForeground(GraphicUserInterface.FOREGROUND);
+        this.setPreferredSize(new Dimension(width, 40));
+        this.setHorizontalAlignment(0);
+    }
+
+    /**
      * Setter for x and y
      * @param x The new value for the field x
      * @param y The new value for the field y

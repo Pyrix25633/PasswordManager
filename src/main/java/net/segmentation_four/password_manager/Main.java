@@ -43,7 +43,7 @@ public class Main {
         }
         UserFile userFile = UserFile.getInstance();
         //keySecurity = new Security(userInterface.getPassword(), userFile.getSalt(), userFile.getIv());
-        keySecurity = new Security("Test123@", userFile.getSalt(), userFile.getIv());
+        keySecurity = new Security(userInterface.getPassword(), userFile.getSalt(), userFile.getIv());
         if(!KeyFile.exists())
             KeyFile.create();
         accountSecurity = KeyFile.getInstance().getSecurity();

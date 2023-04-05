@@ -39,6 +39,23 @@ public class Button extends JButton implements Positionable {
     }
 
     /**
+     * Constructor
+     * @param text The String text
+     * @param layout The Layout
+     * @param position The Position
+     */
+    public Button(String text, Layout layout, Position position, int width) {
+        super(text);
+        this.setFont(font);
+        this.layout = layout;
+        this.position = position;
+        this.setBackground(GraphicUserInterface.BUTTON);
+        this.setForeground(GraphicUserInterface.BACKGROUND);
+        this.setBorderPainted(false);
+        this.setPreferredSize(new Dimension(width, 40));
+    }
+
+    /**
      * Setter for x and y
      * @param x The new value for the field x
      * @param y The new value for the field y

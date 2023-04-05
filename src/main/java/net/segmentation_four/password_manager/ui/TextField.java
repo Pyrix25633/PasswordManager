@@ -38,8 +38,8 @@ public class TextField extends JTextField implements Positionable {
      * @param position The Position
      * @param limit The max input length
      */
-    public TextField(String text, Layout layout, Position position, Window window, int limit) {
-        super(limit);
+    public TextField(String text, Layout layout, Position position, Window window, int limit, int width) {
+        super();
         this.setFont(font);
         this.layout = layout;
         this.position = position;
@@ -48,6 +48,8 @@ public class TextField extends JTextField implements Positionable {
         this.setText(text);
         this.setBackground(GraphicUserInterface.BACKGROUND);
         this.setForeground(GraphicUserInterface.FOREGROUND);
+        this.setPreferredSize(new Dimension(width, 40));
+        this.setHorizontalAlignment(0);
     }
 
     /**

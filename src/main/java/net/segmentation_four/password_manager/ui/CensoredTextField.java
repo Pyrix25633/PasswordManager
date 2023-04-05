@@ -17,14 +17,13 @@ public class CensoredTextField extends TextField {
      * @param position The Position
      * @param limit The max input length
      */
-    public CensoredTextField(Layout layout, Position position, Window window, int limit) {
-        super("", layout, position, window, limit);
+    public CensoredTextField(Layout layout, Position position, Window window, int limit, int width) {
+        super("", layout, position, window, limit, width);
         this.text = "";
     }
 
-    public CensoredTextField(Layout layout, Position position, Window window, int limit, PasswordFeedback onUpdate) {
-        super("", layout, position, window, limit);
-        this.text = "";
+    public CensoredTextField(Layout layout, Position position, Window window, int limit, int width, PasswordFeedback onUpdate) {
+        this(layout, position, window, limit, width);
         this.onUpdate = onUpdate;
     }
 
