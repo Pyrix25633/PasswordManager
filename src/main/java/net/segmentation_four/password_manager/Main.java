@@ -3,20 +3,17 @@ package net.segmentation_four.password_manager;
 import com.google.zxing.WriterException;
 import net.segmentation_four.password_manager.encryption.*;
 import net.segmentation_four.password_manager.ui.*;
-import net.segmentation_four.password_manager.ui.Window;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.*;
-import java.util.List;
 
 /**
  * Main class
@@ -45,7 +42,8 @@ public class Main {
             UserFile.create(userInterface.getNewPassword(tfaKey), tfaKey);
         }
         UserFile userFile = UserFile.getInstance();
-        keySecurity = new Security(userInterface.getPassword(), userFile.getSalt(), userFile.getIv());
+        //keySecurity = new Security(userInterface.getPassword(), userFile.getSalt(), userFile.getIv());
+        keySecurity = new Security("Test123@", userFile.getSalt(), userFile.getIv());
         if(!KeyFile.exists())
             KeyFile.create();
         accountSecurity = KeyFile.getInstance().getSecurity();
@@ -64,5 +62,15 @@ public class Main {
         KeyFile keyFile = KeyFile.getInstance();
         keySecurity = new Security(password, userFile.getSalt(), userFile.getIv());
         KeyFile.create(keyFile.getPassword(), keyFile.getSalt(), keyFile.getIv());
+    }
+
+    public static void regenerateKey() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
+        LinkedList<AccountFile> accountFiles = new LinkedList<>();
+        for(String name : AccountFile.getFileList())
+            accountFiles.add(new AccountFile(name));
+        KeyFile.create();
+        accountSecurity = KeyFile.getInstance().getSecurity();
+        for(AccountFile accountFile : accountFiles)
+            AccountFile.create(accountFile.getName(), accountFile.getUsername(), accountFile.getPassword());
     }
 }

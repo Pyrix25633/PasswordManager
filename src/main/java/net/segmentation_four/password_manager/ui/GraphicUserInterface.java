@@ -140,7 +140,7 @@ public class GraphicUserInterface implements UserInterface {
 
     @Override
     public void main() {
-        Window window = new Window("Password Manager", new Dimension(660, 730));
+        Window window = new Window("Password Manager", new Dimension(660, 800));
         Button changePasswordButton = new Button("Change Password", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(-100, -325));
         changePasswordButton.addActionListener((ActionEvent actionEvent) -> {
@@ -150,13 +150,23 @@ public class GraphicUserInterface implements UserInterface {
                 throw new RuntimeException(e);
             }}).start();
         });
+        Button regenerateKeyButton = new Button("Regenerate Key", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
+                new Position(150, -325));
+        regenerateKeyButton.addActionListener((ActionEvent actionEvent) -> {
+            try {
+                Main.regenerateKey();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         Label passwordLabel = new Label("Password:", new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(-230, -160));
         CensoredTextField passwordField = new CensoredTextField(new Layout(Layout.Horizontal.CENTER, Layout.Vertical.CENTER),
                 new Position(65, -160), window, 32);
+        window.addToPanel(changePasswordButton);
+        window.addToPanel(regenerateKeyButton);
         window.addToPanel(passwordLabel);
         window.addToPanel(passwordField);
-        window.addToPanel(changePasswordButton);
         window.refresh();
     }
 }
