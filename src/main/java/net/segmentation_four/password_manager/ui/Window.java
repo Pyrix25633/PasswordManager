@@ -36,7 +36,7 @@ public class Window extends JFrame {
         this.setMinimumSize(dimension);
         this.panel = new Panel();
         this.add(panel);
-        this.setIconImage(ResourceLoader.loadImage(ICON_PATH, true));
+        this.setIconImage(ResourceLoader.loadImage(ICON_PATH, true, 8));
         this.setVisible(true);
     }
 

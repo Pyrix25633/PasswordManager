@@ -221,7 +221,8 @@ public class GraphicUserInterface implements UserInterface {
                 new Position(-240, 275), 250);
         Label showUsernameLabel = new Label("", new Layout(), new Position(105, 275), 400);
         Button copyUsernameButton = new Button("", new Layout(), new Position(345, 275), 40);
-        copyUsernameButton.setIcon(new ImageIcon(ResourceLoader.loadImage("copy.png", true, 2)));
+        ImageIcon copyIcon = new ImageIcon(ResourceLoader.loadImage("copy.png", true, 2));
+        copyUsernameButton.setIcon(copyIcon);
         copyUsernameButton.addActionListener((ActionEvent actionEvent) -> {
             StringSelection username = new StringSelection(showUsernameLabel.getText());
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(username, username);
@@ -229,7 +230,7 @@ public class GraphicUserInterface implements UserInterface {
         Label passwordLabel2 = new Label("Password:", new Layout(), new Position(-240, 325), 250);
         Label showPasswordLabel = new Label("", new Layout(), new Position(105, 325), 400);
         Button copyPasswordButton = new Button("", new Layout(), new Position(345, 325), 40);
-        copyPasswordButton.setIcon(new ImageIcon(ResourceLoader.loadImage("copy.png", true, 2)));
+        copyPasswordButton.setIcon(copyIcon);
         copyPasswordButton.addActionListener((ActionEvent actionEvent) -> {
             StringSelection password = new StringSelection(showPasswordLabel.getText());
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(password, password);
