@@ -3,6 +3,7 @@ package net.segmentation_four.password_manager.resource;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,20 @@ public class ResourceLoader {
     private static final HashMap<String, BufferedImage> IMAGES = new HashMap<>();
 
     // Public static methods
+
+    /**
+     * Loads a font from the resources folder
+     * @param file The file path
+     * @param size The font size
+     * @return The loaded font
+     * @throws IOException IOException
+     * @throws FontFormatException FontFormatException
+     */
+    public static Font loadFont(String file, int size) throws IOException, FontFormatException {
+        return Font.createFont(Font.TRUETYPE_FONT,
+                Objects.requireNonNull(ResourceLoader.class.getClassLoader().getResourceAsStream(file)))
+                .deriveFont((float)size);
+    }
 
     /**
      * Loads an image file

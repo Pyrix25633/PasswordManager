@@ -56,7 +56,15 @@ public class GraphicUserInterface implements UserInterface {
     /**
      * Interface font
      */
-    public static final Font FONT = new Font("JetBrains Mono", Font.PLAIN, 24);
+    public static final Font FONT;
+
+    static {
+        try {
+            FONT = ResourceLoader.loadFont("JetBrainsMono-Regular.ttf", 24);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public synchronized String getPassword() throws InterruptedException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
