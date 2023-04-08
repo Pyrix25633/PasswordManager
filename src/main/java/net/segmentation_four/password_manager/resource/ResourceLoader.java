@@ -62,7 +62,7 @@ public class ResourceLoader {
     public static @NotNull BufferedImage loadImage(String file, boolean fromResources, int scale) throws IOException {
         BufferedImage image = loadImage(file, fromResources);
         BufferedImage scaledImage = new BufferedImage(image.getWidth() * scale, image.getHeight() * scale,
-                BufferedImage.TYPE_INT_RGB);
+                BufferedImage.TYPE_INT_ARGB);
         for(int x = 0; x < image.getWidth(); x++) {
             for(int y = 0; y < image.getHeight(); y++) {
                 int color = image.getRGB(x, y);
