@@ -84,15 +84,6 @@ public class AccountFile {
     // Public static methods
 
     /**
-     * Tests if an AccountFile exists
-     * @param name The file name, without the extension
-     * @return True if the specified file exists
-     */
-    public static boolean exists(String name) {
-        return new File(PATH.replace("$", name)).exists();
-    }
-
-    /**
      * Creates an AccountFile
      * @param name The file name, without the extension
      * @param username The username
