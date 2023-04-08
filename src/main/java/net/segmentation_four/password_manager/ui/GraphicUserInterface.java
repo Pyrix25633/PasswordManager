@@ -197,10 +197,10 @@ public class GraphicUserInterface implements UserInterface {
         Label usernameLabel1 = new Label("Username/E-mail:", new Layout(),
                 new Position(-240, -125), 250);
         TextField usernameField = new TextField("", new Layout(),
-                new Position(135, -125), window, 32, 460);
+                new Position(135, -125), window, 128, 460);
         Label passwordLabel1 = new Label("Password:", new Layout(), new Position(-240, -75), 250);
         TextField passwordField = new TextField("", new Layout(),
-                new Position(135, -75), window, 32, 460);
+                new Position(135, -75), window, 64, 460);
         Label passwordLengthLabel = new Label("Random Password Length:", new Layout(),
                 new Position(-35, -25), 660);
         TextField passwordLengthField = new TextField("", new Layout(),
@@ -247,7 +247,9 @@ public class GraphicUserInterface implements UserInterface {
         });
         showButton.addActionListener((ActionEvent actionEvent) -> {
             try {
-                AccountFile account = new AccountFile((String)nameCombo.getSelectedItem());
+                String selected = (String)nameCombo.getSelectedItem();
+                if(selected == null) return;
+                AccountFile account = new AccountFile(selected);
                 showUsernameLabel.setText(account.getUsername());
                 showPasswordLabel.setText(account.getPassword());
             } catch (Exception e) {
@@ -256,7 +258,9 @@ public class GraphicUserInterface implements UserInterface {
         });
         deleteButton.addActionListener((ActionEvent actionEvent) -> {
             try {
-                AccountFile.delete((String)nameCombo.getSelectedItem());
+                String selected = (String)nameCombo.getSelectedItem();
+                if(selected == null) return;
+                AccountFile.delete(selected);
                 nameCombo.removeAllItems();
                 for(String account : AccountFile.getFileList())
                     nameCombo.addItem(account);
