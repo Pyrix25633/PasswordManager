@@ -10,32 +10,83 @@ import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.LinkedList;
 import java.util.Scanner;
 
+/**
+ * Class for reading from an encoded file
+ * @author Segmentation Four
+ * @version 1.0.0
+ */
 public class EncodedInputFile {
+    // Fields
+
     private final FileInputStream stream;
     private final Scanner scanner;
 
+    // Constructors
+
+    /**
+     * Constructor
+     * @param path The file path
+     * @throws FileNotFoundException FileNotFoundException
+     */
     public EncodedInputFile(String path) throws FileNotFoundException {
         this.stream = new FileInputStream(path);
         this.scanner = new Scanner(this.stream);
     }
 
-    public String next() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    // Public methods
+
+    /**
+     * Reads a String
+     * @return A String
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidKeyException InvalidKeyException
+     */
+    public String next() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return new String(Base64.getDecoder().decode(this.scanner.next()));
     }
 
-    public BigInteger nextBigInteger() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    /**
+     * Reads a BigInteger
+     * @return A BigInteger
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidKeyException InvalidKeyException
+     */
+    public BigInteger nextBigInteger() throws InvalidAlgorithmParameterException, NoSuchPaddingException,
+            IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return new BigInteger(Base64.getDecoder().decode(this.scanner.next()));
     }
 
-    public byte[] nextBytes() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    /**
+     * Reads a byte array
+     * @return A byte array
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidKeyException InvalidKeyException
+     */
+    public byte[] nextBytes() throws InvalidAlgorithmParameterException, NoSuchPaddingException,
+            IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return Base64.getDecoder().decode(this.scanner.next());
     }
 
+    /**
+     * Closes the file
+     * @throws IOException IOException
+     */
     public void close() throws IOException {
         this.stream.close();
     }

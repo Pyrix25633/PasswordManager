@@ -1,19 +1,17 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Class to manage a position
- * @author Pyrix25633
+ * Class for handling a position
+ * @author Segmentation Four
  * @version 1.0.0
  */
 public class Position {
-    /**
-     * The x coordinate
-     */
+    // Fields
+
     private final int x;
-    /**
-     * The y coordinate
-     */
     private final int y;
+
+    // Constructors
 
     /**
      * Constructor
@@ -25,17 +23,19 @@ public class Position {
         this.y = y;
     }
 
+    // Getters
+
     /**
-     * Getter for x
-     * @return The field x
+     * Gets the x field
+     * @return The x field
      */
     public int getX() {
         return x;
     }
 
     /**
-     * Getter for y
-     * @return The field y
+     * Gets the y field
+     * @return The y field
      */
     public int getY() {
         return y;

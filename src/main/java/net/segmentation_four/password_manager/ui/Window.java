@@ -1,29 +1,34 @@
 package net.segmentation_four.password_manager.ui;
 
-import net.segmentation_four.password_manager.util.ResourceLoader;
+import net.segmentation_four.password_manager.resource.ResourceLoader;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 /**
- * Class to create a window
+ * Class for handling a window
  * @author Pyrix25633
  * @version 1.0.0
  */
 public class Window extends JFrame {
-    private static final String iconPath = "./.resources/icon.png";
+    // Constants
 
-    /**
-     * The Panel
-     */
+    private static final String ICON_PATH = "icon.png";
+
+    // Fields
+
     private final Panel panel;
+
+    // Constructors
 
     /**
      * Constructor
      * @param title The title
      * @param dimension The Dimension
+     * @throws IOException IOException
      */
-    public Window(String title, Dimension dimension) {
+    public Window(String title, Dimension dimension) throws IOException {
         super();
         this.setTitle(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,12 +36,14 @@ public class Window extends JFrame {
         this.setMinimumSize(dimension);
         this.panel = new Panel();
         this.add(panel);
-        this.setIconImage(ResourceLoader.loadImage(iconPath));
+        this.setIconImage(ResourceLoader.loadImage(ICON_PATH, true));
         this.setVisible(true);
     }
 
+    // Public methods
+
     /**
-     * Method to request the focus
+     * Request the focus
      */
     @Override
     public void requestFocus() {
@@ -45,7 +52,7 @@ public class Window extends JFrame {
     }
 
     /**
-     * Method to add a Positionable Component to the Window's Panel
+     * Adds a Positionable Component to the Window's Panel
      * @param positionable The Positionable Component
      * @param <T> Type that extends Component and implements Positionable
      */
@@ -55,7 +62,7 @@ public class Window extends JFrame {
     }
 
     /**
-     * Setter for the Window's Panel background Color
+     * Sets the Window's Panel background Color
      * @param color The new background Color
      */
     @Override
@@ -66,7 +73,7 @@ public class Window extends JFrame {
     }
 
     /**
-     * Method to repaint the Window's Panel
+     * Repaints the Window's Panel
      */
     public void refresh() {
         this.panel.repaint();

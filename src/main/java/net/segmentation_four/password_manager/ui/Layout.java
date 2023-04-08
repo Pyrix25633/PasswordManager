@@ -1,13 +1,15 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Class to manage a layout
- * @author Pyrix25633
+ * Class for handling a layout
+ * @author Segmentation Four
  * @version 1.0.0
  */
 public class Layout {
+    // Inner classes
+
     /**
-     * Enum to manage an Horizontal Layout
+     * Enum for handling an Horizontal Layout
      */
     public enum Horizontal {
         /**
@@ -25,7 +27,7 @@ public class Layout {
     }
 
     /**
-     * Enum to manage a Vertical Layout
+     * Enum for handling a Vertical Layout
      */
     public enum Vertical {
         /**
@@ -42,6 +44,8 @@ public class Layout {
         BOTTOM
     }
 
+    // Fields
+
     /**
      * The Horizontal Layout
      */
@@ -50,6 +54,15 @@ public class Layout {
      * The Vertical Layout
      */
     public final Vertical vertical;
+
+    // Constructors
+
+    /**
+     * Constructor
+     */
+    public Layout() {
+        this(Horizontal.CENTER, Vertical.CENTER);
+    }
 
     /**
      * Constructor

@@ -4,54 +4,69 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+/**
+ * Class for handling a censored text field
+ * @author Segmentation Four
+ * @version 1.0.0
+ */
 public class CensoredTextField extends TextField {
+    // Fields
+
     private String text;
     private PasswordFeedback onUpdate;
+
+    // Constructors
 
     /**
      * Constructor
      * @param layout The Layout
      * @param position The Position
+     * @param window The window it has been added to
      * @param limit The max input length
+     * @param width The width
      */
     public CensoredTextField(Layout layout, Position position, Window window, int limit, int width) {
         super("", layout, position, window, limit, width);
         this.text = "";
     }
 
-    public CensoredTextField(Layout layout, Position position, Window window, int limit, int width, PasswordFeedback onUpdate) {
+    /**
+     * Constructor
+     * @param layout The Layout
+     * @param position The Position
+     * @param window The window it has been added to
+     * @param limit The max input length
+     * @param width The width
+     * @param onUpdate The action executed when the field is modified
+     */
+    public CensoredTextField(Layout layout, Position position, Window window, int limit, int width,
+                             PasswordFeedback onUpdate) {
         this(layout, position, window, limit, width);
         this.onUpdate = onUpdate;
     }
 
+    // Getters
+
+    /**
+     * Gets the uncensored text field
+     * @return The uncensored text field
+     */
     @Override
     public String getText() {
         return text;
     }
 
-    /**
-     * Method to limit the number of characters
-     * @return A LimitDocument
-     */
+    // Protected methods
+
     @Override
     protected Document createDefaultModel() {
         return new CensoredLimitDocument();
     }
 
-    /**
-     * Inner class for limiting number of characters
-     */
+    // Inner classes
+
     private class CensoredLimitDocument extends PlainDocument {
-        /**
-         * Method to add a string to the document if it fits
-         * @param offset The offset
-         * @param str The String
-         * @param attr The AttributeSet
-         * @throws BadLocationException If the location is not valid
-         */
         @Override
         public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
             if(str == null) return;

@@ -5,19 +5,17 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Class to create a panel
- * @author Pyrix25633
+ * Class for handling a panel
+ * @author Segmentation Four
  * @version 1.0.0
  */
 public class Panel extends JPanel {
-    /**
-     * The Positionable Components
-     */
+    // Fields
+
     private final ArrayList<Positionable> positionables;
-    /**
-     * The Color
-     */
     private Color color;
+
+    //Constructors
 
     /**
      * Constructor
@@ -29,8 +27,10 @@ public class Panel extends JPanel {
         this.color = GraphicUserInterface.BACKGROUND;
     }
 
+    // Public methods
+
     /**
-     * Method to add a Positionable Component to the Panel
+     * Adds a Positionable Component to the Panel
      * @param positionable The Positionable Component to add
      * @param <T> Type that extends Component and implements Positionable
      */
@@ -40,7 +40,7 @@ public class Panel extends JPanel {
     }
 
     /**
-     * Setter for the background Color
+     * Sets the background Color
      * @param color The new background Color
      */
     @Override
@@ -50,7 +50,7 @@ public class Panel extends JPanel {
     }
 
     /**
-     * Method to repaint the Panel
+     * Repaints the Panel
      */
     @Override
     public void repaint() {

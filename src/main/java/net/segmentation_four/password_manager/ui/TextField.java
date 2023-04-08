@@ -8,39 +8,32 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 
 /**
- * Class to create a text field
- * @author Pyrix25633
+ * Class for handling a text field
+ * @author SegmentationFour
  * @version 1.0.0
  */
 public class TextField extends JTextField implements Positionable {
-    /**
-     * Static field for the font
-     */
-    private static final Font font = new Font("JetBrains Mono", Font.PLAIN, 24);
-    /**
-     * The Layout
-     */
-    private final Layout layout;
-    /**
-     * The Position
-     */
-    private final Position position;
+    // Fields
+
+    protected final Layout layout;
+    protected final Position position;
     protected final Window window;
-    /**
-     * The input length limit
-     */
     protected final int limit;
+
+    // Constructors
 
     /**
      * Constructor
      * @param text The String text
      * @param layout The Layout
      * @param position The Position
+     * @param window The window it has been added to
      * @param limit The max input length
+     * @param width The width
      */
     public TextField(String text, Layout layout, Position position, Window window, int limit, int width) {
         super();
-        this.setFont(font);
+        this.setFont(GraphicUserInterface.FONT);
         this.layout = layout;
         this.position = position;
         this.window = window;
@@ -52,55 +45,34 @@ public class TextField extends JTextField implements Positionable {
         this.setHorizontalAlignment(0);
     }
 
-    /**
-     * Setter for x and y
-     * @param x The new value for the field x
-     * @param y The new value for the field y
-     */
+    // Public methods
+
     @Override
     public void setXY(int x, int y) {
         Dimension size = this.getPreferredSize();
         this.setBounds(x, y, size.width, size.height);
     }
 
-    /**
-     * Getter for field layout
-     * @return The field layout
-     */
     @Override
     public Layout getPositionableLayout() {
         return layout;
     }
 
-    /**
-     * Getter for field position
-     * @return The field position
-     */
     @Override
     public Position getPosition() {
         return position;
     }
 
-    /**
-     * Method to limit the number of characters
-     * @return A LimitDocument
-     */
+    // Protected methods
+
     @Override
     protected Document createDefaultModel() {
         return new LimitDocument();
     }
 
-    /**
-     * Inner class for limiting number of characters
-     */
+    // Inner classes
+
     protected class LimitDocument extends PlainDocument {
-        /**
-         * Method to add a string to the document if it fits
-         * @param offset The offset
-         * @param str The String
-         * @param attr The AttributeSet
-         * @throws BadLocationException If the location is not valid
-         */
         @Override
         public void insertString(int offset, String  str, AttributeSet attr) throws BadLocationException {
             if(str == null) return;

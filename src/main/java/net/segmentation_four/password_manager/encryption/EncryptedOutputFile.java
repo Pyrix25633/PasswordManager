@@ -8,15 +8,31 @@ import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
+/**
+ * Class fo writing to an encrypted file
+ * @author Segmentation Four
+ * @version 1.0.0
+ */
 public class EncryptedOutputFile extends EncodedOutputFile {
+    // Fields
+
     private final Security security;
 
+    // Constructors
+
+    /**
+     * Constructor
+     * @param path The file path
+     * @param security The Security instance with the key used for decryption
+     * @throws FileNotFoundException FileNotFoundException
+     */
     public EncryptedOutputFile(String path, Security security) throws FileNotFoundException {
         super(path);
         this.security = security;
     }
+
+    // Public methods
 
     @Override
     public void println(String line) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {

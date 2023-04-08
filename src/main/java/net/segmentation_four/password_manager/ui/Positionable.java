@@ -1,38 +1,40 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Interface to manage a Positionable Component
- * @author Pyrix25633
+ * Interface for handling a Positionable Component
+ * @author Segmentation Four
  * @version 1.0.0
  */
 public interface Positionable {
+    // Public methods
+
     /**
-     * Setter for x and y
-     * @param x The new value for the field x
-     * @param y The new value for the field y
+     * Sets x and y fields
+     * @param x The new value for the x field
+     * @param y The new value for the y field
      */
     void setXY(int x, int y);
 
     /**
-     * Getter for field layout
-     * @return The field layout
+     * Gets the layout field
+     * @return The layout field
      */
     Layout getPositionableLayout();
 
     /**
-     * Getter for field position
-     * @return The field position
+     * Gets the position field
+     * @return The position field
      */
     Position getPosition();
 
     /**
-     * Getter for the width
+     * Gets the width
      * @return The width
      */
     int getWidth();
 
     /**
-     * Getter for the height
+     * Gets the height
      * @return The height
      */
     int getHeight();
