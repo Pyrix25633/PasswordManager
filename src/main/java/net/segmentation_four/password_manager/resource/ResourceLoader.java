@@ -7,12 +7,15 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
 
 /**
  * Class for handling resource loading
  * @author Segmentation Four
+ * @version 1.0.1
  */
 public class ResourceLoader {
     // Constants
@@ -72,5 +75,19 @@ public class ResourceLoader {
             }
         }
         return scaledImage;
+    }
+
+    /**
+     * Checks if a path is valid
+     * @param path The path
+     * @return True if it is valid
+     */
+    public static boolean isValidPath(String path) {
+        try {
+            Paths.get(path);
+            return true;
+        } catch(InvalidPathException e) {
+            return false;
+        }
     }
 }

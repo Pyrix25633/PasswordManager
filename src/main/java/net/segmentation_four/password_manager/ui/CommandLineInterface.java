@@ -5,6 +5,7 @@ import net.segmentation_four.password_manager.Main;
 import net.segmentation_four.password_manager.encryption.AccountFile;
 import net.segmentation_four.password_manager.encryption.Security;
 import net.segmentation_four.password_manager.encryption.UserFile;
+import net.segmentation_four.password_manager.resource.ResourceLoader;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -22,7 +23,7 @@ import java.util.Scanner;
 /**
  * Class for handling command line interface
  * @author Segmentation Four
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class CommandLineInterface implements UserInterface {
     //Fields
@@ -81,41 +82,60 @@ public class CommandLineInterface implements UserInterface {
     }
 
     @Override
-    public void main() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException, InterruptedException, WriterException {
+    public void main() throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+            IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException,
+            InterruptedException, WriterException {
         boolean exit;
         do {
-            System.out.println("Menu");
-            System.out.println(" 1. Change Password");
-            System.out.println(" 2. Regenerate Key");
-            System.out.println(" 3. Create/Modify Account");
-            System.out.println(" 4. Generate Random Password");
-            System.out.println(" 5. Show Account");
-            System.out.println(" 6. Delete Account");
-            System.out.print("Choice: ");
-            switch(Integer.parseInt(in.nextLine())) {
+            out.println("Menu");
+            out.println(" 1. Change Password");
+            out.println(" 2. Regenerate Key");
+            out.println(" 3. Create/Modify Account");
+            out.println(" 4. Generate Random Password");
+            out.println(" 5. Show Account");
+            out.println(" 6. Delete Account");
+            out.print("Choice: ");
+            int choice;
+            try {
+                choice = Integer.parseInt(in.nextLine());
+            } catch(Exception e) {
+                choice = -1;
+            }
+            switch(choice) {
                 case 1 -> Main.changePassword();
                 case 2 -> Main.regenerateKey();
                 case 3 -> {
-                    System.out.print("Account Name: ");
+                    out.print("Account Name: ");
                     String name = in.nextLine();
-                    System.out.print("Username/E-mail: ");
+                    while(!ResourceLoader.isValidPath(name)) {
+                        out.println("Not a valid Account Name!");
+                        out.print("Account Name: ");
+                        name = in.nextLine();
+                    }
+                    out.print("Username/E-mail: ");
                     String username = in.nextLine();
-                    System.out.print("Password: ");
+                    out.print("Password: ");
                     AccountFile.create(name, username, in.nextLine());
                 }
                 case 4 -> {
-                    System.out.print("Random Password Length: ");
-                    System.out.println(Security.generatePassword(Integer.parseInt(in.nextLine())));
+                    out.print("Random Password Length: ");
+                    int length;
+                    try {
+                        length = Integer.parseInt(in.nextLine());
+                    } catch(Exception e) {
+                        length = 8;
+                    }
+                    out.println(Security.generatePassword(length));
                 }
                 case 5 -> {
                     AccountFile account = new AccountFile(getAccountName());
-                    System.out.println("Username/E-mail: " + account.getUsername());
-                    System.out.println("Password: " + account.getPassword());
+                    out.println("Username/E-mail: " + account.getUsername());
+                    out.println("Password: " + account.getPassword());
                 }
                 case 6 -> AccountFile.delete(getAccountName());
-                default -> System.out.println("No Such Option!");
+                default -> out.println("No Such Option!");
             }
-            System.out.print("Exit? (y/N): ");
+            out.print("Exit? (y/N): ");
             String wantsToExit = in.nextLine();
             exit = wantsToExit.equalsIgnoreCase("Y") || wantsToExit.equalsIgnoreCase("Yes");
         } while(!exit);
@@ -126,16 +146,16 @@ public class CommandLineInterface implements UserInterface {
     private String getAccountName() {
         LinkedList<String> matches;
         do {
-            System.out.print("Account Name: ");
+            out.print("Account Name: ");
             matches = new LinkedList<>();
             String input = in.nextLine();
             for(String name : AccountFile.getFileList())
                 if(name.contains(input))
                     matches.add(name);
             if(matches.size() != 1)
-                System.out.println(matches.size() + " Matches");
+                out.println(matches.size() + " Matches");
             for(String match : matches)
-                System.out.println(" - " + match);
+                out.println(" - " + match);
         } while(matches.size() != 1);
         return matches.get(0);
     }

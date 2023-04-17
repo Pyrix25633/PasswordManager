@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -25,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Class for handling graphic user interface
  * @author Segmentation Four
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class GraphicUserInterface implements UserInterface {
     //Constants
@@ -173,14 +175,13 @@ public class GraphicUserInterface implements UserInterface {
         Window window = new Window("Password Manager", new Dimension(810, 800));
         Button changePasswordButton = new Button("Change Password", new Layout(),
                 new Position(-185, -325), 360);
-        changePasswordButton.addActionListener((ActionEvent actionEvent) -> new Thread(() ->
-            {
-                try {
-                    Main.changePassword();
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }).start());
+        changePasswordButton.addActionListener((ActionEvent actionEvent) -> new Thread(() -> {
+            try {
+                Main.changePassword();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).start());
         Button regenerateKeyButton = new Button("Regenerate Key", new Layout(),
                 new Position(190, -325), 350);
         regenerateKeyButton.addActionListener((ActionEvent actionEvent) -> {
@@ -208,8 +209,16 @@ public class GraphicUserInterface implements UserInterface {
         Button saveButton = new Button("Save Account", new Layout(), new Position(-240, 25), 250);
         Button generatePasswordButton = new Button("Generate Random Password", new Layout(),
                 new Position(135, 25), 460);
-        generatePasswordButton.addActionListener((ActionEvent actionEvent) ->
-            passwordField.setText(Security.generatePassword(Integer.parseInt(passwordLengthField.getText()))));
+        generatePasswordButton.addActionListener((ActionEvent actionEvent) -> {
+            int length;
+            try {
+                length = Integer.parseInt(passwordLengthField.getText());
+            } catch(Exception e) {
+                length = 8;
+                passwordLengthField.setText("8");
+            }
+            passwordField.setText(Security.generatePassword(length));
+        });
         Label showDeleteLabel = new Label("Show/Delete Account", new Layout(), new Position(0, 125));
         Label nameLabel2 = new Label("Account Name:", new Layout(), new Position(-240, 175), 250);
         ComboBox nameCombo = new ComboBox(AccountFile.getFileList().toArray(new String[0]), new Layout(),
@@ -237,18 +246,22 @@ public class GraphicUserInterface implements UserInterface {
         });
         saveButton.addActionListener((ActionEvent actionEvent) -> {
             try {
+                if(!ResourceLoader.isValidPath(nameField.getText())) {
+                    nameField.setText("Invalid Name!");
+                    return;
+                }
                 AccountFile.create(nameField.getText(), usernameField.getText(), passwordField.getText());
                 nameCombo.removeAllItems();
                 for(String account : AccountFile.getFileList())
                     nameCombo.addItem(account);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 throw new RuntimeException(e);
             }
         });
         showButton.addActionListener((ActionEvent actionEvent) -> {
             try {
                 String selected = (String)nameCombo.getSelectedItem();
-                if(selected == null) return;
+                if(selected == null || selected.equals("")) return;
                 AccountFile account = new AccountFile(selected);
                 showUsernameLabel.setText(account.getUsername());
                 showPasswordLabel.setText(account.getPassword());
@@ -259,7 +272,7 @@ public class GraphicUserInterface implements UserInterface {
         deleteButton.addActionListener((ActionEvent actionEvent) -> {
             try {
                 String selected = (String)nameCombo.getSelectedItem();
-                if(selected == null) return;
+                if(selected == null || selected.equals("")) return;
                 AccountFile.delete(selected);
                 nameCombo.removeAllItems();
                 for(String account : AccountFile.getFileList())
