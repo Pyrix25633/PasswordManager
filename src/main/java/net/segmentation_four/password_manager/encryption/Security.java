@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Class that handles encryption and decryption
  * @author Segmenatation Four
- * @version 1.1.0
+ * @version 1.1.1
  */
 public class Security {
     // Constants
@@ -120,18 +120,6 @@ public class Security {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), 65536, 256);
         return new SecretKeySpec(factory.generateSecret(spec).getEncoded(), "AES");
-    }
-
-    /**
-     * Hashes a String in to a BigInteger with SHA-512
-     * @param password The String
-     * @return The hash
-     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
-     */
-    public static @NotNull BigInteger SHA512Hash(@NotNull String password) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
-        byte[] hash = messageDigest.digest(password.getBytes());
-        return new BigInteger(1, hash);
     }
 
     /**

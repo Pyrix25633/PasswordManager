@@ -23,7 +23,7 @@ import java.util.Scanner;
 /**
  * Class that handles command line interface
  * @author Segmentation Four
- * @version 1.1.0
+ * @version 1.1.1
  */
 public class CommandLineInterface implements UserInterface {
     //Fields
@@ -51,17 +51,13 @@ public class CommandLineInterface implements UserInterface {
         UserFile userFile = UserFile.getInstance();
         out.print("Password: ");
         String password = in.nextLine();
-        boolean sha512correct = Security.SHA512Hash(password).equals(userFile.getHash());
-        boolean passwordCorrect = sha512correct || userFile.getHash().equals(Security.SHA3512Hash(password));
+        boolean passwordCorrect = userFile.getHash().equals(Security.SHA3512Hash(password));
         while(!passwordCorrect) {
             out.println("Wrong Password!");
             out.print("Password: ");
-            sha512correct = Security.SHA512Hash(password).equals(userFile.getHash());
-            passwordCorrect = sha512correct || Security.SHA3512Hash(password).equals(userFile.getHash());
+            passwordCorrect = Security.SHA3512Hash(password).equals(userFile.getHash());
             password = in.nextLine();
         }
-        if(sha512correct)
-            UserFile.create(password, userFile.getTfaKey(), userFile.getSalt(), userFile.getIv());
         out.print("2FA Code: ");
         String tfaCode = in.nextLine();
         while(!Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCode.replace(" ", ""))) {

@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Class that handles graphic user interface
  * @author Segmentation Four
- * @version 1.1.0
+ * @version 1.1.1
  */
 public class GraphicUserInterface implements UserInterface {
     //Constants
@@ -84,8 +84,7 @@ public class GraphicUserInterface implements UserInterface {
             synchronized(this) {
                 String passwordText = passwordField.getText();
                 try {
-                    boolean sha512correct = Security.SHA512Hash(passwordText).equals(userFile.getHash());
-                    boolean passwordCorrect = sha512correct || Security.SHA3512Hash(passwordText).equals(userFile.getHash());
+                    boolean passwordCorrect = Security.SHA3512Hash(passwordText).equals(userFile.getHash());
                     boolean tfaCodeCorrect = Security.getTOTPCode(userFile.getTfaKey()).equals(tfaCodeField.getText().replace(" ", ""));
                     if(passwordCorrect) {
                         password.set(passwordText);
@@ -102,10 +101,8 @@ public class GraphicUserInterface implements UserInterface {
                         tfaCodeFeedback.setText("Wrong 2FA Code!");
                         tfaCodeFeedback.setForeground(ERROR);
                     }
-                    if(passwordCorrect && tfaCodeCorrect) {
-                        if(sha512correct) UserFile.create(passwordText, userFile.getTfaKey(), userFile.getSalt(), userFile.getIv());
+                    if(passwordCorrect && tfaCodeCorrect)
                         notifyAll();
-                    }
                     window.refresh();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
