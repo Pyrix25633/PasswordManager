@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class for handling a combo box
+ * Class that handles a combo box
  * @author Segmentation Four
  * @version 1.0.0
  */

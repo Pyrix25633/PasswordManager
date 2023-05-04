@@ -1,7 +1,7 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Interface for handling password feedback
+ * Interface that handles password feedback
  */
 public interface PasswordFeedback {
     // Public methods

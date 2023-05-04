@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class for handling a button
+ * Class that handles a button
  * @author Segmentation Four
  * @version 1.0.0
  */

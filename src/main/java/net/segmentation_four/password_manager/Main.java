@@ -8,6 +8,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -54,6 +55,7 @@ public class Main {
     public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException,
             InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException,
             InvalidKeyException, InterruptedException, WriterException {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> new File(Security.TFA_QR_PATH).delete(), "Shutdown-thread"));
         userInterface = new ArrayList<>(List.of(args)).contains("nogui") ?
                 new CommandLineInterface(System.in, System.out) : new GraphicUserInterface();
         Files.createDirectories(Paths.get("./.resources/accounts"));

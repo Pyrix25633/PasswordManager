@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 /**
- * Class for handling a panel
+ * Class that handles a panel
  * @author Segmentation Four
  * @version 1.0.0
  */

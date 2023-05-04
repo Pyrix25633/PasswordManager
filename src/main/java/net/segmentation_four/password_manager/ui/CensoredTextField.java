@@ -6,7 +6,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 /**
- * Class for handling a censored text field
+ * Class that handles a censored text field
  * @author Segmentation Four
  * @version 1.0.0
  */

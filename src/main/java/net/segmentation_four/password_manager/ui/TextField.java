@@ -8,7 +8,7 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 
 /**
- * Class for handling a text field
+ * Class that handles a text field
  * @author SegmentationFour
  * @version 1.0.0
  */

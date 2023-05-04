@@ -7,8 +7,8 @@ import java.awt.*;
 import java.io.IOException;
 
 /**
- * Class for handling a window
- * @author Pyrix25633
+ * Class that handles a window
+ * @author Segmentation Four
  * @version 1.0.0
  */
 public class Window extends JFrame {

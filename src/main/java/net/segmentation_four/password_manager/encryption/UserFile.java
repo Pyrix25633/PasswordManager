@@ -13,9 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 /**
- * Class for handling the user file
+ * Class that handles the user file
  * @author Segmentation Four
- * @version 1.0.0
+ * @version 1.1.0
  */
 public class UserFile {
     // Constants
@@ -122,10 +122,36 @@ public class UserFile {
             NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException,
             InvalidKeyException {
         EncodedOutputFile out = new EncodedOutputFile(PATH);
-        out.println(Security.SHA512Hash(password));
+        out.println(Security.SHA3512Hash(password));
         out.println(tfaKey);
         out.println(String.valueOf(new Random().nextLong()));
         out.println(Security.generateIv().getIV());
+        out.close();
+        instance = new UserFile();
+    }
+
+    /**
+     * Creates an UserFile with the specified parameters
+     * @param password The password
+     * @param tfaKey The 2FA key
+     * @param salt The salt
+     * @param iv The iv
+     * @throws IOException IOException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidKeyException InvalidKeyException
+     */
+    public static void create(String password, String tfaKey, String salt, IvParameterSpec iv) throws IOException,
+            InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException,
+            NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        EncodedOutputFile out = new EncodedOutputFile(PATH);
+        out.println(Security.SHA3512Hash(password));
+        out.println(tfaKey);
+        out.println(salt);
+        out.println(iv.getIV());
         out.close();
         instance = new UserFile();
     }

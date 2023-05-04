@@ -16,7 +16,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
 
 /**
- * Class for handling the key file
+ * Class that handles the key file
  * @author Segmentation Four
  * @version 1.0.0
  */

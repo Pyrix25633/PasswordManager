@@ -26,7 +26,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Class for handling encryption and decryption
+ * Class that handles encryption and decryption
+ * @author Segmenatation Four
+ * @version 1.1.0
  */
 public class Security {
     // Constants
@@ -121,12 +123,24 @@ public class Security {
     }
 
     /**
-     * Hashes a String in to a BigInteger
+     * Hashes a String in to a BigInteger with SHA-512
      * @param password The String
      * @return The hash
      * @throws NoSuchAlgorithmException NoSuchAlgorithmException
      */
     public static @NotNull BigInteger SHA512Hash(@NotNull String password) throws NoSuchAlgorithmException {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
+        byte[] hash = messageDigest.digest(password.getBytes());
+        return new BigInteger(1, hash);
+    }
+
+    /**
+     * Hashes a String in to a BigInteger with the much more secure SHA3-512
+     * @param password The String
+     * @return The hash
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     */
+    public static @NotNull BigInteger SHA3512Hash(@NotNull String password) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-512");
         byte[] hash = messageDigest.digest(password.getBytes());
         return new BigInteger(1, hash);

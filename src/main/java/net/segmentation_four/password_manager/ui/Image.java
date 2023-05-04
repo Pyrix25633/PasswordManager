@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Class for handling an image
+ * Class that handles an image
  */
 public class Image extends Component implements Positionable {
     //Fields

@@ -10,7 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Class fo writing to an encrypted file
+ * Class that writes to an encrypted file
  * @author Segmentation Four
  * @version 1.0.0
  */

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Class for handling a label
+ * Class that handles a label
  * @author Segmentation Four
  * @version 1.0.0
  */

@@ -1,7 +1,7 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Interface for handling a Positionable Component
+ * Interface that handles a Positionable Component
  * @author Segmentation Four
  * @version 1.0.0
  */

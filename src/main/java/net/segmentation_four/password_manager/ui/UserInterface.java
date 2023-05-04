@@ -12,7 +12,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 /**
- * Interface for handling user inteface
+ * Interface that handles user interface
+ * @author Segmentation Four
+ * @version 1.1.0
  */
 public interface UserInterface {
     // Public methods
@@ -30,7 +32,8 @@ public interface UserInterface {
      * @throws InvalidKeyException InvalidKeyException
      */
     String getPassword() throws InterruptedException, InvalidAlgorithmParameterException, NoSuchPaddingException,
-            IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException;
+            IllegalBlockSizeException, IOException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException,
+            InvalidKeySpecException, WriterException;
 
     /**
      * Gets the new password

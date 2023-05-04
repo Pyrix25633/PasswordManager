@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**
- * Class for handling resource loading
+ * Class that handles resource loading
  * @author Segmentation Four
  * @version 1.0.1
  */

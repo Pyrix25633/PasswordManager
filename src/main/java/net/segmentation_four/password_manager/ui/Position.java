@@ -1,7 +1,7 @@
 package net.segmentation_four.password_manager.ui;
 
 /**
- * Class for handling a position
+ * Class that handles a position
  * @author Segmentation Four
  * @version 1.0.0
  */

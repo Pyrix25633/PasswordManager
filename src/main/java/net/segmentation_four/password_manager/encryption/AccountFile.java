@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * Class for reading and writing account files
+ * Class that reads and writes account files
  * @author Segmentation Four
  * @version 1.0.0
  */

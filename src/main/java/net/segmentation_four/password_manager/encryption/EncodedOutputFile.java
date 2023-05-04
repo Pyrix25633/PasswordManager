@@ -14,7 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * Class for writing to an encoded file
+ * Class that writes to an encoded file
  * @author Segmentation Four
  * @version 1.0.0
  */

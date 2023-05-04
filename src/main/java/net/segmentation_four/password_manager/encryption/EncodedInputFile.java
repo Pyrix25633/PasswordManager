@@ -14,7 +14,7 @@ import java.util.Base64;
 import java.util.Scanner;
 
 /**
- * Class for reading from an encoded file
+ * Class that reads from an encoded file
  * @author Segmentation Four
  * @version 1.0.0
  */

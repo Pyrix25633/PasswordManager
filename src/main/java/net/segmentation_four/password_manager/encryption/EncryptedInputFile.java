@@ -10,7 +10,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Class for reading from an encrypted file
+ * Class that reads from an encrypted file
  * @author Segmentation Four
  * @version 1.0.0
  */
