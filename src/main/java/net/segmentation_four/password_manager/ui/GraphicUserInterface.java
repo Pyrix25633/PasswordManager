@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Class that handles graphic user interface
  * @author Segmentation Four
- * @version 1.1.1
+ * @version 1.1.2
  */
 public class GraphicUserInterface implements UserInterface {
     //Constants
@@ -163,7 +163,6 @@ public class GraphicUserInterface implements UserInterface {
         window.addToPanel(tfaImage);
         window.addToPanel(setPasswordButton);
         window.refresh();
-        window.
         wait();
         window.dispose();
         new File(Security.TFA_QR_PATH).delete();
